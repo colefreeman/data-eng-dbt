@@ -1,0 +1,13 @@
+version: 2
+models:
+  - name: POSITION_ABC_BANK
+    description: The positions we have in the ABC Bank Portfolio.
+    columns:
+      - name: UNREALIZED_PROFIT
+        tests:
+          - not_null
+      - name: UNREALIZED_PROFIT_PCT
+        description: >
+          The unrealized proft percentage on the Position.
+        tests:
+          - not_null

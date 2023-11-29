@@ -27,3 +27,5 @@ hashed as (
 )
 
 SELECT * FROM hashed
+
+{{ config(materialized='ephemeral') }}

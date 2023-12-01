@@ -9,7 +9,7 @@ src_data as (
         , INDUSTRY as INDUSTRY_NAME --TEXT
         , COUNTRY as COUNTRY_CODE --TEXT
         , EXCHANGE as EXCHANGE_CODE --TEXT
-        , LOAD_TS as LOAD_TS --TIMESTAPM_NTZ
+        , LOAD_TS as LOAD_TS --TIMESTAMP_NTZ
         , 'SEED.ABC_BANK_SECURITY_INFO' as RECORD_SOURCE
 
         FROM {{ source('seeds', 'ABC_BANK_SECURITY_INFO') }}
@@ -38,7 +38,7 @@ hashed as (
           concat_ws('|', SECURITY_CODE) as SECURITY_HKEY
         , concat_ws('|', SECURITY_CODE, SECURITY_NAME, SECURITY_NAME, INDUSTRY_NAME, COUNTRY_CODE, EXCHANGE_CODE) as SECURITY_HDIFF
         , * EXCLUDE LOAD_TS
-        , LOAD_TS as LOAD_TS_UTC
+        , '{{ run_started_at }}' as LOAD_TS_UTC
     FROM with_default_record
 )
 

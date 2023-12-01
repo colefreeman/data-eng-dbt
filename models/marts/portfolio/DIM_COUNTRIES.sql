@@ -1,0 +1,2 @@
+SELECT *
+FROM {{ ref('REF_COUNTRIES_INFO') }}

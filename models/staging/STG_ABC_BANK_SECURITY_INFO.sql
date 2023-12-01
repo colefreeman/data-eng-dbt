@@ -38,6 +38,7 @@ hashed as (
           concat_ws('|', SECURITY_CODE) as SECURITY_HKEY
         , concat_ws('|', SECURITY_CODE, SECURITY_NAME, SECURITY_NAME, INDUSTRY_NAME, COUNTRY_CODE, EXCHANGE_CODE) as SECURITY_HDIFF
         , * EXCLUDE LOAD_TS
+        , LOAD_TS as LOAD_TS_UTC
     FROM with_default_record
 )
 

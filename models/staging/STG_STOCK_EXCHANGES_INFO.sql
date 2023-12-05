@@ -50,11 +50,11 @@ with_default_record as (
 
 hashed as (
     SELECT
-          concat_ws('|', STOCK_EXCHANGE_NAME, EXCHANGE_CODE) as STOCK_EXCHANGES_HKEY
-        , concat_ws('|', STOCK_EXCHANGE_NAME, EXCHANGE_CODE, COUNTRY_LOCATED, CITY_LOCATED) as STOCK_EXCHANGES_HDIFF
-        , * EXCLUDE LOAD_TS
+          {{ dbt_utils.surrogate_key(['STOCK_EXCHANGE_NAME', 'EXCHANGE_CODE']) }} as STOCK_EXCHANGES_HKEY
+        , {{ dbt_utils.surrogate_key(['STOCK_EXCHANGE_NAME', 'EXCHANGE_CODE', 'COUNTRY_LOCATED', 'CITY_LOCATED']) }} as STOCK_EXCHANGES_HDIFF
+        , *
         , '{{ run_started_at }}' as LOAD_TS_UTC
-    FROM with_default_record
+    FROM src_data
 )
 
 SELECT * FROM hashed

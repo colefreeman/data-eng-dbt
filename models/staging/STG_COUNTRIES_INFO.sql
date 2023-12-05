@@ -46,11 +46,12 @@ with_default_record as (
 
 hashed as (
     SELECT
-          concat_ws('|', COUNTRY_NAME, COUNTRY_CODE_TWO_LETTER) as COUNTRIES_HKEY
-        , concat_ws('|', COUNTRY_NAME, COUNTRY_CODE_TWO_LETTER, COUNTRY_CODE_THREE_LETTER, NUMERIC_COUNTRY_CODE, SUB_REGION_CODE) as COUNTRIES_HDIFF
-        , * EXCLUDE LOAD_TS
+          {{ dbt_utils.surrogate_key(['COUNTRY_NAME', 'COUNTRY_CODE_TWO_LETTER']) }} as COUNTRIES_HKEY
+        , {{ dbt_utils.surrogate_key(['COUNTRY_NAME', 'COUNTRY_CODE_TWO_LETTER', 'COUNTRY_CODE_THREE_LETTER', 'NUMERIC_COUNTRY_CODE', 'SUB_REGION_CODE']) }} as COUNTRIES_HDIFF
+        , *
         , '{{ run_started_at }}' as LOAD_TS_UTC
-    FROM with_default_record
+    FROM src_data
 )
 
 SELECT * FROM hashed
+

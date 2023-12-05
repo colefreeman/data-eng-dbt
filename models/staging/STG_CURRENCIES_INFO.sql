@@ -34,15 +34,11 @@ with_default_record as (
 
 hashed as (
     SELECT
-          concat_ws('|', ALPHABETIC_CODE, NUMERIC_CODE) as CURRENCIES_HKEY
-        , concat_ws('|', ALPHABETIC_CODE, NUMERIC_CODE, CURRENCY_NAME) as CURRENCIES_HDIFF
-        , * EXCLUDE LOAD_TS
+          {{ dbt_utils.surrogate_key(['ALPHABETIC_CODE', 'NUMERIC_CODE']) }} as CURRENCIES_HKEY
+        , {{ dbt_utils.surrogate_key(['ALPHABETIC_CODE', 'NUMERIC_CODE', 'CURRENCY_NAME']) }} as CURRENCIES_HDIFF
+        , *
         , '{{ run_started_at }}' as LOAD_TS_UTC
-    FROM with_default_record
+    FROM src_data
 )
 
 SELECT * FROM hashed
-
-
-
-

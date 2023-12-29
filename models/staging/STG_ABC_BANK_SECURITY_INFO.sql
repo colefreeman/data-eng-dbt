@@ -24,7 +24,7 @@ default_record as (
         , '-1' as COUNTRY_CODE
         , '-1' as EXCHANGE_CODE
         , '2020-01-01' as LOAD_TS
-        , 'system.DefaultKey' as RECORD_SOURCE
+        , 'System.DefaultKey' as RECORD_SOURCE
 ),
 
 with_default_record as(
@@ -39,7 +39,7 @@ hashed as (
         , {{ dbt_utils.surrogate_key(['SECURITY_CODE', 'SECURITY_NAME', 'SECURITY_NAME', 'INDUSTRY_NAME', 'COUNTRY_CODE', 'EXCHANGE_CODE']) }} as SECURITY_HDIFF
         , *
         , '{{ run_started_at }}' as LOAD_TS_UTC
-    FROM src_data
+    FROM with_default_record
 )
 
 SELECT * FROM hashed

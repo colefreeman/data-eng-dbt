@@ -38,11 +38,12 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   portfolio_tracking:
     +materialized: view
-    staging: # Data storage layer
+
+    staging: # Applies to all files under models/staging/
       +materialized: view
       +schema: STAGING
 
-    refined:  # Applies to all files under models/example/
+    refined:  # Applies to all files under models/refined/
       +materialized: table
       +schema: REFINED
 
@@ -54,3 +55,31 @@ models:
 snapshots:
   portfolio_tracking:
     +target_schema: SNAPSHOTS
+
+seeds:
+  +schema: seed_data
+  portfolio_tracking:
+    ABC_BANK_SECURITY_INFO:
+      +post_hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+      +column_types:
+        LOAD_TS: TIMESTAMP
+    COUNTRIES_INFO:
+      +post_hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+      +column_types:
+        LOAD_TS: TIMESTAMP
+    CURRENCIES_INFO:
+      +post_hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+      +column_types:
+        LOAD_TS: TIMESTAMP
+    STOCK_EXCHANGES_INFO:
+      +post_hook:
+        - "UPDATE {{ this }} SET LOAD_TS = '{{ run_started_at }}' WHERE LOAD_TS is null"
+      +column_types:
+        LOAD_TS: TIMESTAMP
+tests:
+  portfolio_tracking:
+    +enabled: true
+    +severity: warn
